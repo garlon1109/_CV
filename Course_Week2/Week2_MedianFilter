@@ -1,0 +1,69 @@
+import cv2
+import numpy as np
+
+img_ori = cv2.imread('lenna.jpg',1)
+
+'''
+代码功能：插入椒盐噪声
+LJR 2020.11.19
+'''
+
+def SaltAndPepperNoise(img, snr):#snr为信噪比
+    h = img.shape[0]
+    w = img.shape[1]
+    img1 = img.copy()
+    PixelSum = h * w #计算共有多少个像素点
+    NoisePixel = int(PixelSum * (1 - snr))
+    for i in range(NoisePixel):
+        randx = np.random.randint(1, h-1)
+        randy = np.random.randint(1, w-1)#随机某个位置进行噪声插入
+        if np.random.random() <= 0.5:
+            img1[randx, randy] = 0
+        else:
+            img1[randx, randy] = 255
+    return img1
+
+
+'''
+代码功能：单通道中值滤波
+LJR 2020.11.19
+'''
+def MedianFilter_R(img):  #dim为滤波框大小
+    height = img.shape[0]
+    width = img.shape[1]
+    img1 = np.zeros((height,width), np.uint8)#构造空白矩阵
+    for i in range(1, height-1):
+        for j in range(1, width-1):
+            tmp = np.zeros(9, np.uint8)
+            s = 0
+            for k in range(-1,2):
+                for l in range(-1,2):#采集包括中点在内的9个附近像素的值
+                    tmp[s] = img[i+k,j+l]
+                    s += 1
+            for y in range(8):#排序 也可以使用np.sort()
+                count = y
+                for x in range(y,8):
+                    if tmp[count] > tmp[x + 1]:
+                        count = x + 1
+                tmp[y],tmp[count] = tmp[count], tmp[y]#存在后比前大即交换
+            median = tmp[4]
+            img1[i,j] = median
+    return img1
+
+
+
+
+imgNoise = SaltAndPepperNoise(img_ori, 0.9)
+B,G,R = cv2.split(imgNoise)
+BlueFiltered = MedianFilter_R(B)
+GreenFiltered = MedianFilter_R(G)
+RedFiltered = MedianFilter_R(R)
+imgFiltered = cv2.merge((BlueFiltered,GreenFiltered,RedFiltered))
+
+cv2.imshow('lenna_photo', imgNoise)
+cv2.imshow('2', imgFiltered)
+key = cv2.waitKey(0)
+if key == 27:
+    cv2.destroyALLWindows()
+
+print(B)

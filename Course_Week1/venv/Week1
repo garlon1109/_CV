@@ -1,0 +1,182 @@
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+img_ori = cv2.imread('lenna.jpg', 1)
+
+'''#第一种方法显示图片
+cv2.imshow('lenna_photo', img_ori)
+key = cv2.waitKey(0)
+if key == 27:
+    cv2.destroyALLWindows()
+'''
+'''第二种方法显示图片
+plt.figure(figsize=(2,2))
+plt.imshow(img_ori) #由于imshow默认输入为BGR，而JPG实际参数矩阵为RGB，imshow直接输出的图片为冷色调图
+plt.show()
+'''
+'''
+plt.subplot(323)
+plt.imshow(img_ori)
+plt.subplot(324)
+plt.imshow(cv2.cvtColor(img_ori, cv2.COLOR_BGR2RGB))#转换为BGR输入
+plt.show()
+'''
+
+def show_img(img, size=(3,3)):#输出彩图
+    plt.figure(figsize=size)
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.show()
+
+'''
+# image crop
+show_img(img_ori[150:300][100:200])
+'''
+# channal split
+'''
+B,G,R =cv2.split(img_ori)#分别得到R,G,B三个通道的值
+cv2.imshow('B', B)
+cv2.imshow('G', G)
+cv2.imshow('R', R)
+key = cv2.waitKey(0)
+if key == 27:
+    cv2.destroyALLWindows()
+'''
+
+def img_cooler(img,b_increase,r_decrease):
+    B, G, R = cv2.split(img)
+    b_lim = 255 - b_increase
+    B[B>b_lim] = 255 #[]中为条件判断
+    B[B<=b_lim] = (b_increase + B[B<=b_lim]).astype(img.dtype) #确保不为浮点
+
+    r_lim = 255 - r_decrease
+    R[R<r_lim] = 0
+    R[R>=r_lim] = (R[R>=r_lim] - r_decrease).astype(img.dtype)
+    return cv2.merge((B, G, R))
+
+cooler_image = img_cooler(img_ori, 30, 10)
+#show_img(cooler_image)
+
+
+
+
+#Gamma Change
+def adjust_gamma(img, gamma = 1.0):
+    invGamma = 1.0/gamma
+    table = []
+    for i in range(256):
+        table.append(((i/255.0)**invGamma)*255) #y =  x^gamma
+    table = np.array((table)).astype('uint8')
+    return cv2.LUT(img, table)
+
+img_dark = cv2.imread('dark.jpg', 8)
+img_brighter = adjust_gamma(img_dark,2)
+#show_img(img_dark, size = (8,8))
+
+
+# 直方图均衡
+'''
+plt.subplot(121)
+plt.hist(img_dark.flatten(), 256, [0, 256], color = 'r')
+plt.subplot(122)
+plt.hist(img_brighter.flatten(), 256, [0, 256], color = 'b')
+plt.show()
+'''
+#YUV 进行直方图均衡来提升亮度
+img_yuv = cv2.cvtColor(img_dark,cv2.COLOR_BGR2YUV)
+img_yuv[:,:,0] = cv2.equalizeHist(img_yuv[:,:,0])
+img_output = cv2.cvtColor(img_yuv,cv2.COLOR_YUV2BGR)
+
+#show_img(img_output,size = (8,8))
+
+# Affine Transform
+rows, cols, ch = img_ori.shape
+pts1 = np.float32([[0, 0], [cols, 0], [0, rows]])#初始三角形顶点
+pts2 = np.float32([[cols * 0.2, rows * 0.1], [cols * 0.7, rows * 0.2], [cols * 0.1, rows * 0.9]])#变换后三角形顶点
+pts3 = np.float32([[cols*0.1, rows*0.1], [cols*0.7,rows*0.1], [cols*0.1, rows*0.5]])
+
+M = cv2.getAffineTransform(pts1, pts2)#等到仿射变换矩阵
+dst = cv2.warpAffine(img_ori, M, (cols, rows))
+#show_img(dst)
+
+# perspective transform
+import random
+def random_warp(img, row, col):
+    height, width, channels = img.shape
+
+    # warp:
+    random_margin = 60
+    x1 = random.randint(-random_margin, random_margin)
+    y1 = random.randint(-random_margin, random_margin)
+    x2 = random.randint(width - random_margin - 1, width - 1)
+    y2 = random.randint(-random_margin, random_margin)
+    x3 = random.randint(width - random_margin - 1, width - 1)
+    y3 = random.randint(height - random_margin - 1, height - 1)
+    x4 = random.randint(-random_margin, random_margin)
+    y4 = random.randint(height - random_margin - 1, height - 1)
+
+    dx1 = random.randint(-random_margin, random_margin)
+    dy1 = random.randint(-random_margin, random_margin)
+    dx2 = random.randint(width - random_margin - 1, width - 1)
+    dy2 = random.randint(-random_margin, random_margin)
+    dx3 = random.randint(width - random_margin - 1, width - 1)
+    dy3 = random.randint(height - random_margin - 1, height - 1)
+    dx4 = random.randint(-random_margin, random_margin)
+    dy4 = random.randint(height - random_margin - 1, height - 1)
+
+    pts1 = np.float32([[x1, y1], [x2, y2], [x3, y3], [x4, y4]])
+    pts2 = np.float32([[dx1, dy1], [dx2, dy2], [dx3, dy3], [dx4, dy4]])
+    M_warp = cv2.getPerspectiveTransform(pts1, pts2)
+    img_warp = cv2.warpPerspective(img, M_warp, (width, height))
+    return M_warp, img_warp
+
+M_warp, img_warp = random_warp(img_ori, img_ori.shape[0], img_ori.shape[1])
+#show_img(img_warp)
+
+##切换底色
+
+def photo_change(img,):
+    img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    rows, cols, ch = img_hsv.shape
+    #蓝色区间
+    blue_range_low = np.array([78, 43, 46])
+    blue_range_high = np.array([124,255,255])
+
+    mask = cv2.inRange(img_hsv,blue_range_low,blue_range_high)#位于low和high区间外的值为0 内的值为255
+
+    erd = cv2.erode(mask, None,iterations = 2)#腐蚀
+    dil = cv2.dilate(erd, None, iterations = 1)#膨胀
+
+    for i in range(rows):
+        for j in range(cols):
+            if dil[i,j] == 255:
+                img[i,j] = [0,0,255]
+
+    plt.figure(figsize=(8,8))
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.show()
+    return
+
+def photobg_change(img,):
+    img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)#img_hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    rows, cols, ch = img_hsv.shape#rows, cols, ch = img_hsv.shape
+    #设置蓝色的上线hue限
+    blue_range_low = np.array([78, 43, 46])#blue_range_low = np.array([78, 43, 46])
+    blue_range_high = np.array([124,255,255])#blue_range_high = np.array([124,255,255])
+    #做掩膜
+    mask = cv2.inRange(img_hsv,blue_range_low,blue_range_high)#mask = cv2.inRange(img_hsv,blue_range_low,blue_range_high)
+    #腐蚀膨胀（闭运算，先腐蚀后膨胀）
+    erd = cv2.erode(mask, None,iterations = 2)#erd = cv2.erode(mask, None,iterations = 2)
+    dil = cv2.dilate(erd, None, iterations = 1)#dil = cv2.dilate(erd, None, iterations = 1)
+    #遍历像素点，替换
+    for i in range(rows):#for i in range(rows):
+        for j in range(cols):#for j in range(cols):
+            if dil[i,j] == 255:#if dil[i,j] == 255:
+                img[i, j] =[0,0,255] #img[i,j] == [0,0,255]
+    plt.figure(figsize=(6, 6))#plt.figure(figsize=(8,8))
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))#plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.show()#plt.show()
+    return#return
+
+ChangeColor = cv2.imread('test.jpg',1)
+photobg_change(ChangeColor)

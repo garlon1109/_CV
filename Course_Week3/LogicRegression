@@ -1,0 +1,66 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.optimize as op
+from sklearn.datasets.samples_generator import make_classification
+
+X, Y = make_classification(n_samples=200, n_features=2, n_redundant=0,
+                             n_clusters_per_class=1, n_classes=2)
+plt.scatter(X[:, 0], X[:, 1], marker='o', c=Y)
+plt.show()
+
+
+def sigmoid(z):
+    sig = 1./(1.+ np.exp(-z))
+    return sig
+
+
+def LossFunction(theta, X, Y):
+    theta = np.array(theta).reshape((np.size(theta),1))
+    m = np.size(Y)
+    h = sigmoid(np.dot(X,theta))
+    J = 1/m*(-np.dot(Y.T, np.log(h)) - np.dot((1-Y.T), np.log(1-h)))  #J(theta) = -1/m[y*Ln(f(x))+(1-y)*Ln(1-f(x))]
+    return J.flatten()
+
+def gradient(theta, X, Y):
+     theta = np.array(theta).reshape((np.size(theta), 1))
+     m = np.size(Y)
+     h = sigmoid(np.dot(X, theta))
+     grad = 1/m*np.dot(X.T, h - Y)
+     return grad.flatten()
+
+m = np.size(X[:,0])
+pos = np.where(Y == 1)[0]
+neg = np.where(Y == 0)[0]
+X_pos = X[pos, 0:2]
+X_neg = X[neg, 0:2]
+plt.plot(X_pos[:, 0], X_pos[:, 1], '-')
+plt.plot(X_neg[:, 0], X_neg[:, 1], '-.')
+plt.xlabel('frist parameter')
+plt.ylabel('second parameter')
+#plt.show()
+
+one = np.ones(m)
+X = np.insert(X, 0, values = one, axis = 1)
+Y = np.array(Y).reshape((np.size(Y),1))
+#print(Y)
+initial_theta = np.zeros(np.size(X, 1))
+result = op.minimize(fun=LossFunction, x0=initial_theta, args=(X, Y), method='TNC', jac=gradient)#求极值 TNC为牛顿截断法
+theta = result.x
+cost = result.fun
+#print(X)
+
+plot_x = np.array([np.min(X[:, 1]), np.max(X[:, 2])])
+plot_y = (-1/theta[2])*(theta[1]*plot_x+theta[0])
+plt.plot(plot_x,plot_y)
+plt.legend(labels=['type1', 'type2'])
+plt.axis([-2, 2, -2, 2])
+plt.show()
+
+theta = np.array(theta).reshape((np.size(theta),1))
+z = np.dot([1, -0.5, 0.5], theta)
+prob = sigmoid(z)
+print('The point in -0.5 to 0.5', prob)
+p = np.round(sigmoid(np.dot(X,theta)))
+acc = np.mean(p==Y)*100
+print('Train Accuracy: ',acc,'%')
+#print(p)

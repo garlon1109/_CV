@@ -1,0 +1,135 @@
+import numpy as np
+import cv2
+from matplotlib import pyplot as plt
+import scipy
+import factor
+import scipy.spatial
+
+
+import PreProcess
+import FindExtreme
+import GeneratorDescriptor
+
+def show_img(img, size=(3,3)):#输出彩图
+    plt.figure(figsize=size)
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.show()
+
+
+
+img1 = cv2.imread('E:\_TempPhoto\p004.jpg')
+img2 = cv2.imread('E:\_TempPhoto\p005.jpg')
+
+img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+
+
+
+
+
+class sift(object):
+    def __init__(self):
+        self.distanceThresh = 0.00000000001
+        self.similarityThresh = 0.8
+
+    def match(self, p, s):
+        pa = np.dot(p, 255 / p.max())#归一化
+        sa = np.dot(s, 255 / s.max())
+
+        pre = PreProcess.PreProcess()
+        ex = FindExtreme.FindExtreme()
+        des = GeneratorDescriptor.GenerateDescriptor()
+        scale = factor.factor()
+
+
+        pdata = pre.CreateDOG(pa)
+        sdata = pre.CreateDOG(sa)
+
+        result = {}
+
+        pFeatures = ex.getPatextremes(pdata, pa)
+        sFeatures = ex.getPatextremes(sdata, sa)
+
+        pDes =des.CreatDes(pFeatures, pa)#坐标与描述子的字典
+        sDes = des.CreatDes(sFeatures, sa)
+
+        if sDes == {} or pDes == {}:
+            return 'there is no Descriptors'
+        else:
+            '''
+            使用cKDTree计算两点间的欧几里得距离 参考资料#https://blog.csdn.net/u010949998/article/details/79716195
+            '''
+            # use cKD tree struture to compute the two similar pixels
+            tree = scipy.spatial.cKDTree(list(sDes.values()))
+            slocList = list(sDes.keys())
+            pDict = {}
+            sDict = {}
+            for p in pDes.keys():
+                x = pDes[p]
+                re = tree.query(x, k=2, eps=self.distanceThresh, p=2,
+                                distance_upper_bound=np.inf)
+
+                if re[0][1] != 0 and re[0][0] / re[0][1] < self.similarityThresh:
+                    pLoc = p
+                    sLoc = slocList[re[1][0]]
+                    distance = re[0][0]
+
+                    if sDict.__contains__(sLoc) == False:
+
+                        result[(pLoc, sLoc)] = distance
+                        pDict[pLoc] = sLoc
+                        sDict[sLoc] = pLoc
+
+                    elif distance < result.get((sDict[sLoc], sLoc)):
+
+                        del result[(sDict[sLoc], sLoc)]
+                        result[(pLoc, sLoc)] = distance
+                        del pDict[sDict[sLoc]]
+                        pDict[pLoc] = sLoc
+                        sDict[sLoc] = pLoc
+
+                elif re[0][1] == 0:
+                    pLoc = p
+                    sLoc = slocList[re[1][0]]
+                    distance = re[0][0]
+
+                    if sDict.__contains__(sLoc) == False:
+
+                        # add the result and compared pattern pixel
+                        # and source pixel
+                        result[(pLoc, sLoc)] = distance
+                        pDict[pLoc] = sLoc
+                        sDict[sLoc] = pLoc
+
+                    elif distance < result.get((sDict[sLoc], sLoc)):
+
+                        del result[(sDict[sLoc], sLoc)]
+                        result[(pLoc, sLoc)] = distance
+                        del pDict[sDict[sLoc]]
+                        pDict[pLoc] = sLoc
+                        sDict[sLoc] = pLoc
+
+        #按距离排序
+        finResult = sorted(result.items(), reverse=False, key=lambda d: d[1])
+
+        match1 = finResult[0][0]
+        match2 = finResult[1][0]
+        match3 = finResult[2][0]
+
+        scalingFactor = scale.calFactor(match1, match2, match3)
+
+        return finResult, scalingFactor
+#test
+SIFT = sift()
+coord1, scalingFactor1 = SIFT.match(img1, img2)
+coord2, scalingFactor2 = SIFT.match(img2, img1)
+hmerge = np.hstack((img1, img2))
+cv2.imshow("gray", hmerge)
+cv2.waitkey(0)
+
+img3 = cv2.drawKeypoints(img1,coord1,img1,color=(255,0,255))
+img4 = cv2.drawKeypoints(img2,coord2,img2,color=(255,0,255))
+hmerge = np.hstack((img3, img4)) #水平拼接
+cv2.imshow("point", hmerge) #拼接显示为gray
+cv2.waitKey(0)

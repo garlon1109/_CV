@@ -1,0 +1,153 @@
+import cv2 as cv
+import math
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+trans = PolynomialFeatures(degree = 2)
+linear_clf = LinearRegression
+
+img_ori = cv.imread('lenna.jpg',1)
+
+def SPNoise(img, snr):#snr为信噪比
+    h = img.shape[0]
+    w = img.shape[1]
+    img1 = img.copy()
+    PixelSum = h * w #计算共有多少个像素点
+    NoisePixel = int(PixelSum * (1 - snr))
+    for i in range(NoisePixel):
+        randx = np.random.randint(1, h-1)
+        randy = np.random.randint(1, w-1)#随机某个位置进行噪声插入
+        if np.random.random() <= 0.5:
+            img1[randx, randy] = 0
+        else:
+            img1[randx, randy] = 255
+    return img1
+
+
+#计算高斯卷积核
+def gausskernel(size):
+    sigma = 1.0
+    gausskernel = np.zeros((size,size), np.float32)
+    center = (size/2) - 0.5
+    for i in range (size):
+        for j in range(size):
+            norm = math.pow(i-center, 2) + pow(j-center, 2) #(i-1)^2 + (j-1)^2  / 2*simga^2 3*3的高斯核中心为1 ， 所以是i-1
+            gausskernel[i,j] = math.exp(-norm/(2*math.pow(sigma,2)))
+    sum = np.sum(gausskernel) #求归一化参数
+    kernel = gausskernel / sum #归一化
+    return kernel
+
+#高斯滤波
+def GaussFilter(img):
+    h = img.shape[0]
+    w = img.shape[1]
+    img_processed = np.zeros((h,w),np.uint8)
+    kernel = gausskernel(3)
+    for i in range(1, h-1):
+        for j in range(1, w-1):
+            sum = 0
+            for k in range(-1, 2):
+                for l in range(-1, 2):
+                    sum += img[i+k, j+l]*kernel(k+1, l+1) #高斯滤波
+            img[i,j] = sum
+    return img_processed
+'''
+代码功能：单通道中值滤波
+LJR 2020.11.19
+'''
+def MedianFilter(img):  #dim为滤波框大小
+    height = img.shape[0]
+    width = img.shape[1]
+    img1 = np.zeros((height,width), np.uint8)#构造空白矩阵
+    for i in range(1, height-1):
+        for j in range(1, width-1):
+            tmp = np.zeros(9, np.uint8)
+            s = 0
+            for k in range(-1,2):
+                for l in range(-1,2):#采集包括中点在内的9个附近像素的值
+                    tmp[s] = img[i+k,j+l]
+                    s += 1
+            for y in range(8):#排序 也可以使用np.sort()
+                count = y
+                for x in range(y,8):
+                    if tmp[count] > tmp[x + 1]:
+                        count = x + 1
+                tmp[y],tmp[count] = tmp[count], tmp[y]#存在后比前大即交换
+            median = tmp[4]
+            img1[i,j] = median
+    return img1
+'''
+testcode
+'''
+
+imgNoise = SPNoise(img_ori, 0.9)
+B,G,R = cv.split(imgNoise)
+BlueFiltered = GaussFilter(B)
+GreenFiltered = GaussFilter(G)
+RedFiltered = GaussFilter(R)
+imgFiltered = cv.merge((BlueFiltered,GreenFiltered,RedFiltered))
+
+cv.imshow('lenna_photo', imgNoise)
+cv.imshow('2', imgFiltered)
+key = cv.waitKey(0)
+if key == 27:
+    cv.destroyALLWindows()
+
+
+'''
+Ransac算法实现
+'''
+
+def Ransac(data, model, n, k, t, d):
+    '''
+    :param data: 数据
+    :param model:模型
+    :param n:随机抽取样本数量
+    :param k:迭代次数
+    :param t:阈值
+    :param d:测试集大于多少才认为是好的模型
+    :return:
+    '''
+    data_size = len(data)
+    iterations = 0 #迭代次数
+    best_model = None
+    besterr = np.inf
+    best_inlier_idxs = None
+
+    while iterations < k:
+        maybe_idxs, test_idxs = shuffle_data(data_size, n)#每次从数据集中随机选择n个点
+        maybe_inlier  = data[maybe_idxs,:]#第maybe_idxs行
+        test_inlier = data[test_idxs,:]#第test_idxs行
+        maybeModel = linear_clf.fit(trans.fit_transform(maybe_inlier[:,:-1]), maybe_inlier[:,-1])
+        test_error,_=get_error(maybeModel, test_inlier[:,:-1], test_inlier[:,-1])
+        also_idxs=test_idxs[test_error<t]
+        also_inliers=data[also_idxs,:]
+        if len(also_inliers)>d:
+            better_data=np.concatenate((maybe_inlier,also_inliers))
+            betterModel=linear_clf.fit(trans.fit_transform(better_data[:,:-1]),better_data[:,-1])
+            _,thisError=get_error(betterModel,better_data[:,:-1],better_data[:,-1])
+            if thisError<besterr:
+                best_model=betterModel
+                besterr=thisError
+                best_inlier_idxs=np.concatenate((maybe_idxs,also_idxs))
+        iterations+=1
+    if best_model is None:
+        raise ValueError("无法拟合出model")
+    else:
+    	return best_model,besterr,best_inlier_idxs
+
+
+def shuffle_data(data_row, n):#生成随机数据
+    idxs = np.arrange(data_row)
+    np.random.shuffle(idxs)
+    return idxs[:n], idxs[n:]
+
+def get_error(model, test, y_true):#误差计算
+    y_predict = model.predict(test)
+    error = np.sqrt((y_predict - y_true)**2)#绝对值
+    mean_error = np.mean(error)#误差均值
+    return error, mean_error
+
+'''
+
+'''

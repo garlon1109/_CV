@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5aa2e52f-fb4c-4582-9095-48a425f661dd" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="4" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1XhHEeZlVqn0yDvh0vv9ApArHxH" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Week3/Week3.py" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="two.files.diff.last.used.file" value="E:/_Cv/SIFT-master/SIFT-master/process.py" />
+  </component>
+  <component name="RunManager" selected="Python. SelfSift">
+    <configuration name=" SelfSift" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="4" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ SelfSift" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="4" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Test2" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="4" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Test2.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="descriptor" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="4" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="E:/_Cv/SIFT-master/SIFT-master" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="E:/_Cv/SIFT-master/SIFT-master/descriptor.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sift" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="4" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="D:\Python\python.exe" />
+      <option name="WORKING_DIRECTORY" value="E:/_Cv/SIFT-master/SIFT-master" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="E:/_Cv/SIFT-master/SIFT-master/sift.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python. SelfSift" />
+        <item itemvalue="Python.Test" />
+        <item itemvalue="Python.sift" />
+        <item itemvalue="Python.descriptor" />
+        <item itemvalue="Python.Test2" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5aa2e52f-fb4c-4582-9095-48a425f661dd" name="Default Changelist" comment="" />
+      <created>1581491295170</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1581491295170</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="362" y="78" key="#Notifications" timestamp="1582762896720">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="362" y="78" key="#Notifications/0.0.1536.824@0.0.1536.824" timestamp="1582762896720" />
+    <state x="223" y="70" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1582805357986">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="223" y="70" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1582805357986" />
+    <state x="521" y="221" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582128176620">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="521" y="221" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1582128176620" />
+    <state x="485" y="65" key="#sift" timestamp="1582762720906">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="485" y="65" key="#sift/0.0.1536.824@0.0.1536.824" timestamp="1582762720906" />
+    <state x="141" y="196" width="1336" height="630" key="DiffContextDialog" timestamp="1582480767482">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="141" y="196" width="1336" height="630" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1582480767482" />
+    <state x="549" y="171" key="FileChooserDialogImpl" timestamp="1583064765242">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="171" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1583064765242" />
+    <state width="756" height="201" key="GridCell.Tab.0.bottom" timestamp="1582815939490">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="756" height="201" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1582815939490" />
+    <state width="756" height="201" key="GridCell.Tab.0.center" timestamp="1582815939490">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="756" height="201" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1582815939490" />
+    <state width="756" height="201" key="GridCell.Tab.0.left" timestamp="1582815939490">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="756" height="201" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1582815939490" />
+    <state width="756" height="201" key="GridCell.Tab.0.right" timestamp="1582815939490">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="756" height="201" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1582815939490" />
+    <state width="1501" height="258" key="GridCell.Tab.1.bottom" timestamp="1582762512136">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1501" height="258" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1582762512136" />
+    <state width="1501" height="258" key="GridCell.Tab.1.center" timestamp="1582762512136">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1501" height="258" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1582762512136" />
+    <state width="1501" height="258" key="GridCell.Tab.1.left" timestamp="1582762512136">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1501" height="258" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1582762512136" />
+    <state width="1501" height="258" key="GridCell.Tab.1.right" timestamp="1582762512136">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1501" height="258" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1582762512136" />
+    <state x="272" y="58" key="SettingsEditor" timestamp="1582812562692">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="272" y="58" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1582812562692" />
+    <state x="100" y="100" width="1336" height="630" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1582812284294">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="100" y="100" width="1336" height="630" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1536.824@0.0.1536.824" timestamp="1582812284294" />
+    <state x="461" y="241" key="com.intellij.ide.util.TipDialog" timestamp="1583064714419">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="461" y="241" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1583064714419" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1581853038111">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1581853038111" />
+  </component>
+</project>

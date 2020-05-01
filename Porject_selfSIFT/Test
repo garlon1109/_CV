@@ -1,0 +1,146 @@
+import numpy as np
+import cv2
+from matplotlib import pyplot as plt
+
+imgname = 'E:\_TempPhoto\aaa.jpeg'
+
+img_ori = cv2.imread(imgname)
+
+#读图片
+img1 = cv2.imread('E:\_TempPhoto\aaa.jpeg')
+img2 = cv2.imread('E:\_TempPhoto\p005.jpg')
+
+img1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+def show_img(img, size=(3,3)):#输出彩图
+    plt.figure(figsize=size)
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.show()
+
+def TranslationTrans(img, hTranslation = 500, hDirection = 'right',vTranslation = 0, vDirection = 'null'):
+    '''
+    平移变换
+    :param height: 
+    :param width: 
+    :param Translation:移位像素点 
+    :return: 
+    '''
+    imgInfo = img.shape
+    height = imgInfo[0]
+    width = imgInfo[1]
+
+    if vDirection == 'null':
+        _height  = height
+        _voffset = 0
+    else:
+        _height = height - vTranslation
+        if vDirection == 'dowm':
+            _voffset = vTranslation
+        elif vDirection == 'up':
+            _voffset = -vTranslation
+
+
+    if hDirection == 'null':
+        _width = width
+        _hoffset = 0
+    else:
+        _width = width - hTranslation
+        if hDirection == 'right':
+            _hoffset = hTranslation
+        elif hDirection == 'left':
+            _hoffst = -hTranslation
+
+    dst = np.zeros(imgInfo, np.uint8)
+
+    for i in range(_height):
+        for j in range(_width):
+            dst[i + _voffset, j + _hoffset] = img[i, j]
+
+    return dst
+
+img_Trans = TranslationTrans(img_ori,0,'null',100,'up')
+#show_img(img_ori)
+#show_img(img_Trans)
+
+def MirrorTrans(img):
+    imgInfo = img.shape
+    height = imgInfo[0]
+    width = imgInfo[1]
+    channel = imgInfo[2]
+
+    dst = np.zeros([height, width, channel], np.uint8) #int
+
+    for i in range(height):
+        for j in range(width):
+            dst[height - i - 1, j] = img[i, j]
+    return dst
+
+img_Trans = MirrorTrans(img_ori)
+#show_img(img_Trans)
+
+def ResizeTrans(img, HeightResize = 2.0, WidthResize = 2.0):#插值法。。。很慢
+    imgInfo = img.shape
+    height = imgInfo[0]
+    width = imgInfo[1]
+    channel = imgInfo[2]
+
+    dstHeight = int(height * HeightResize)
+    dstwidth = int(width * WidthResize)
+
+    dst = np.zeros([dstHeight, dstwidth, channel], np.uint8)
+    for i in range(dstHeight):
+        for j in range(dstwidth):
+            dsti = i / HeightResize
+            dstj = j / WidthResize
+
+            dst[i, j] = img[int(dsti), int(dstj)]
+
+    return dst
+
+img_Trans = ResizeTrans(img_ori, 0.5, 0.5)
+#plt.subplot(121)
+#plt.imshow(cv2.cvtColor(img_ori, cv2.COLOR_BGR2RGB))
+#plt.subplot(122)
+#plt.imshow(cv2.cvtColor(img_Trans, cv2.COLOR_BGR2RGB))
+#plt.show()
+
+def RotateTrans(img, center, angle, resize):
+    imgInfo = img.shape
+    height = imgInfo[0]
+    width = imgInfo[1]
+
+    matRotate = cv2.getRotationMatrix2D((height*center, width*center), angle, resize) # mat rotate 1 center 2 angle 3 缩放系数
+    dst = cv2.warpAffine(img, matRotate, (width, height))
+    return dst
+
+img_Trans = RotateTrans(img_ori,0.5,65,0.5)
+plt.imshow(cv2.cvtColor(img_Trans, cv2.COLOR_BGR2RGB))
+plt.show()
+
+
+#仿射： 所有点沿同一方向平移并作旋转和放缩
+def AffineTrans(img):
+    imgInfo = img.shape
+    height = imgInfo[0]
+    width = imgInfo[1]
+
+    #原顶点 左上角
+    matSrc = np.float32([[0,0], [0,height - 1],[width - 1, 0]])
+    #目标
+    matDst = np.float32([[10,10], [100, height - 50],[width - 10, 20]])
+
+    matAffine = cv2.getAffineTransform(matSrc,matDst)
+    dst = cv2.warpAffine(img, matAffine, (width, height))#图像 变换矩阵 尺寸
+    return dst
+
+img_Trans = AffineTrans(img_ori)
+plt.imshow(cv2.cvtColor(img_Trans, cv2.COLOR_BGR2RGB))
+plt.show()
+
+
+
+
+
+#print(img1.max())
+

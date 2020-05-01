@@ -1,0 +1,4 @@
+SelfSift为主文件 依次实现了SIFT差分金字塔图像预处理 harris角点检测 hessian边沿检测  描述子生成 特征匹配 自己根据原理实现了SIFT 
+但是无奈暴力循环太多 图像生成不理想 
+Test为图像变换应用
+Test2为使用opencv完成的通过RANSAC过滤badpoint的 SIFT算法
